@@ -6,4 +6,4 @@ Repository for Oliver Cutbill's M1 thesis on Nesterov Accelerated Gradient Desce
 
 1. Install `typst`: [https://typst.app/](https://typst.app/)
 2. Navigate to repository directory locally
-3. Run `typst compile thesis.typ
+3. Run `typst compile thesis.typ -f pdf`
