@@ -21,6 +21,4 @@ If $f, g : RR arrow.r RR^*_+$, then
 $
   f(x) = o(g(x)) text("means") forall epsilon > 0 space exists x_0 in RR :f(x)/g(x) < epsilon text("for") x > x_0
 $
-which is equivalent to saying that $f(x)\/g(x) arrow.r 0$ as $x arrow.r infinity$. That is, $f arrow.r 0$ _strictly faster_ than $g(x) arrow.r 0$.
-
-If $f in o(g)$, then $f in O(g)$
+which is equivalent to saying that $f(x)\/g(x) arrow.r 0$ as $x arrow.r infinity$. That is, if $g arrow.r 0$ then $f arrow.r 0$ _strictly faster_ than $g(x) arrow.r 0$. But it is not necessary that $g arrow.r 0$, just that $f$ is eventually negligible compared to $g$. Clearly, if $f in o(g)$, then $f in O(g)$.

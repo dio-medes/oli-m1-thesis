@@ -8,6 +8,8 @@
 // packages used - keep minimal
 #import "@preview/great-theorems:0.1.2": *
 #import "@preview/rich-counters:0.2.1": *
+//notes shortcuts
+#let edouard(question) = text(weight: 700, fill: red, question)
 // maths shortcuts
 #let aset(x) = $lr({#x})$
 #let why(reason) = [(#reason)]
