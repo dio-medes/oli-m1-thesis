@@ -1,5 +1,6 @@
 #import "../preamble.typ": *
 #show: notes
+#set page(numbering: "1")
 
 #set math.equation(numbering: "(1)")
 #let nonum(eq) = math.equation(block: true, numbering: none, eq)
@@ -89,8 +90,6 @@ Therefore $x^*$ is a global minimum.
 ]<lem:foc>
 
 For the convex case, the above lemma can be seen as a _supporting hyperplane_ result if you consider that the _epigraph_ of a convex function is a convex set. The epigraph consists of points in $RR^(p+1)$ and its members have the form $(f(x), x) in RR^(p+1)$. The supporting hyperplane vector is then $(1, - nabla f (x))$.
-
-#edouard("is there a way to view the strongly-convex result this way?")
 
 If $x^* in arg min f$, then by Fermat's rule we have $nabla f(x^*) = 0$. Using this in the equation above yields
 $
@@ -306,7 +305,14 @@ $
 $
 Unpacking the definition of $A$ gives (@eq:conv-in-value), and we have $f(x_k) arrow.r f(x^*)$ at the $O(1/k)$ rate.
 
-Proving point covergence in this case is much easier. Note that because $norm(x_k - x^*) <= norm(x_0 - x^*) =: r$, $x_k in overline(B)(x^*, r)$. Therefore $(x_k)$ is a bounded sequence in $RR^p$, has at least one convergent subsequence by the Bolzano-Weierstrass theorem. Let this subsequence be $x_phi(k) arrow.r x_s$ for $phi(k) >= k$.
+Proving point covergence in this case is much easier. Let $r = norm(x_0 - x^*)$. We know a few things from the above work. First, the sequence $a_k := norm(x_k - x^*)$ converges to some $l in [0, r]$. In particular, we do not yet know that $l = 0$. 
+
+
+Second, we know $x_k in overline(B)(x^*, r)$.Therefore $(x_k)$ is a bounded sequence in $RR^p$, has at least one convergent subsequence by the Bolzano-Weierstrass theorem. Let this subsequence be $x_phi(k) arrow.r x_s$ for $phi(k) >= k$. By the continuity of $f$, we know $f(x_phi(k)) arrow.r f(x_s)$. But the sequence
+$
+  (f(x_phi(k)))_k
+$
+is itself a subsequence of the convergent sequence $f(x_k)$. This means that $f(x_s) = f(x^*)$, so $x_s in arg min f$. Hence, we know $norm(x_k - x_s) arrow.r l in [0, r]$, since $x_s$ is a minimiser. But $x_phi(k) arrow.r x_s$, hence by _SLAP_, $x_k arrow.r x_s in arg min f$.
 
 
 ]
