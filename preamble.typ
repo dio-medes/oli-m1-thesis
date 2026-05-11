@@ -15,12 +15,14 @@
 #let why(reason) = [(#reason)]
 #set text(/*font: "Arial",*/size: 14pt)
 #set page(margin: (x: 2cm, y: 2cm))
+#let seqfull(x, i) = $#x#h(0pt)scripts(""_(#i))$ // seqfull({x_k}, k >= 0)
 // maths notation
 #let bd = math.op("bd")
 #let int = math.op("int")
 #let cl = math.op("cl")
 #let conv = math.op("conv")
 #let dom = math.op("dom")
+#let argmin = math.op("argmin", limits: true)
 // definition, remark, theorem, lemma environments
 #let mbpadding(body) = pad(left: 1em, right: 1em, body)
 #let mathcounter = rich-counter(
