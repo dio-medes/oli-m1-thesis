@@ -115,11 +115,15 @@ This lemma provides some intuition for how NAG works. Due to the factor of $t_k$
 
 The whole idea of using these functions is to prove $Phi_(k+1) - Phi_k <= B_k$, for some sequence $seqfull({B_k}, k >=0)$ (often $B_k = 0$).
 
-The following lemma is really the core of the whole proof, everything that comes after is standard analysis.
+The following lemma is really the core of the whole proof, everything that comes after in the proof is standard analysis.
 
 #lemma(title: "Potential")[
 
 ]<potential>
+
+#proof(title: [])[
+
+]
 
 = Boundedness
 
