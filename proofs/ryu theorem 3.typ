@@ -110,20 +110,35 @@ This lemma provides some intuition for how NAG works. Due to the factor of $t_k$
   $
     Phi_k = a_k (f(x_k) - f(x_star)) + b_k norm(x_k - x_star), quad k in NN^*
   $
-  for $a_k, b_k >= 0$.
+  for $a_k, b_k >= 0$. Often we use $norm(x_k - x_star)^2$ instead of just $norm(x_k - x_star)$.
 ]
 
-The whole idea of using these functions is to prove $Phi_(k+1) - Phi_k <= B_k$, for some sequence $seqfull({B_k}, k >=0)$ (often $B_k = 0$).
+The whole idea of using these functions is to pick $Phi$ such that an inequality like $Phi_(k+1) - Phi_k <= B_k$ can be proven, for some sequence $seqfull({B_k}, k >=0)$ (often $B_k = 0$). Then, by the telescoping sum
 
-The following lemma is really the core of the whole proof, everything that comes after in the proof is standard analysis.
+$
+  sum_(k = 0)^(N-1) Phi_(k+1) - Phi_k <= sum_(k = 0)^(N-1) B_k arrow.double.r Phi_N  <= Phi_0 + sum_(k=0)^(N-1) B_k.
+$
+Unpacking the definition of $Phi_N$,
+$
+  a_k lr(\(, size: #150%) f(x_N) - f(x_star) lr(\), size:#150%) &<=  a_k lr(\(, size: #150%) f(x_N) - f(x_star) lr(\), size:#150%) + underbrace(b_k norm(x_k - x_star), >= thin 0)\
+  &<= Phi_0 + sum_(k=0)^(N-1) B_k \
+  arrow.double.r f(x_N) - f(x_star) &<= 1/a_k lr(\(, size: #250%) Phi_0 + sum_(k=0)^(N-1) B_k lr(\), size: #250%)
+$
+
+The following lemma is really the core tool of the whole proof.
 
 #lemma(title: "Potential")[
-
+  For $x_star in argmin f$ and $k in NN$, let
+  $
+    cal(E)_k (x_star) = t^2_(k-1) lr(\(, size: #150%) f(x_k) - f_star) lr(\), size: #150%) + L/2 norm(z_k - x_star)^2
+  $
 ]<potential>
 
 #proof(title: [])[
 
 ]
+
+What is surprising is that the literature that considered potential functions as a proof method did not find the Nesterov convergence proof sooner. In section 5.2 of @Bansal_2019, the authors have the exact expressions that the authors of @jang2026pointconvergencenesterovsaccelerated say are a key, non-trivial step.
 
 = Boundedness
 

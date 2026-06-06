@@ -1,5 +1,6 @@
 /* minimal packages required */
 #import "@preview/hydra:0.6.2": hydra
+#import "preamble.typ": *
 
 /* document styling */
 
@@ -20,7 +21,7 @@
 /* document metadata */
 
 #set document(title: [
-Nesterov Accelerated Gradient Descent
+The literature leading to the AI-assisted proof of point convergence of Nesterov's Accelerated Gradient Method
 ])
 
 /* document begins */
@@ -30,19 +31,33 @@ Nesterov Accelerated Gradient Descent
   #text(size: 18pt, weight: "bold")[#context document.title]
   #v(0.5em)
   Oliver Richard Cutbill \
-  Toulouse School of Economics \
-  #link("mailto:oliver-richard.cutbill@ut-capitole.fr")
+  Supervised by Professor Edouard Pauwels
   #v(1em)
   *Abstract* \
-  This is an abstract.
+  ...
   #v(1em)
 ]
 
 = Introduction
 
-This thesis is based on @jang2026pointconvergencenesterovsaccelerated and is closed related to @bot2025iteratesnesterovsacceleratedalgorithm. Consider a function $f: bb(R)^p arrow.r bb(R)$ that is convex, $L$-smooth, and satisfies $inf(f) > -infinity$. Then ...
+- Definition of the main problem: minimising a continuous, convex, and L-lipschitz function
+- Importance of convex and L-lipschitz, meanings, convexity and Lipschitz inequalities
+- Plain gradient descent method, acceleration methods, well-known basic facts about these
+- Nesterov Gradient Descent, key facts
+- Ryu Theorem 3.5 stated
+- Why is point convergence important
+- Not doing things in chronological order but it will be noted in some pleaces
 
-= Next section
+= Complexity
+
+- Explanation of key concepts: algorithms as black boxes that generate sequences; information oracles; given a certain black box, lowerbounds on the suboptimality gaps for classes of functions
+- The analysis of convex optimization algorithms via oracle complexity and lower complexity bounds were first studied
+
+
+
+
+
+
 
 
 /* document bibliograph */
