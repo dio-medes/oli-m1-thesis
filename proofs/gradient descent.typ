@@ -308,7 +308,6 @@ Unpacking the definition of $A$ gives (@eq:conv-in-value), and we have $f(x_k) a
 
 Proving point covergence in this case is much easier. Let $r = norm(x_0 - x^*)$. We know a few things from the above work. First, the sequence $a_k := norm(x_k - x^*)$ converges to some $l in [0, r]$. In particular, we do not yet know that $l = 0$. 
 
-
 Second, we know $x_k in overline(B)(x^*, r)$. Therefore $(x_k)$ is a bounded sequence in $RR^p$, has at least one convergent subsequence by the Bolzano-Weierstrass theorem. Let this subsequence be $x_phi(k) arrow.r x_s$ for $phi(k) >= k$. By the continuity of $f$, we know $f(x_phi(k)) arrow.r f(x_s)$. But the sequence
 $
   (f(x_phi(k)))_k

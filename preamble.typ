@@ -86,7 +86,7 @@ suffix: [#h(1fr) $qed$],
 #let definition = thmbox("definition", "Definition", inset: (x: 1em, top: 0em))
 
 #let example = thmplain("example", "Example").with(numbering: none)
-#let proof = thmproof("proof", "Proof", inset: (x: 0em, top: 0em))
+#let proof = thmproof("proof", "Proof", inset: (x: 1em, top: 0em))
 // the show and set rules that are part of notes
 #let notes(doc) = {
 set heading(numbering: "1.")
