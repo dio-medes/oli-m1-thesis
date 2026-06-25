@@ -1,5 +1,6 @@
 #import "../preamble.typ": *
 #show: notes
+
 #set page(numbering: "1")
 
 #set math.equation(numbering: "(1)")
