@@ -337,10 +337,10 @@ So it suffices to take $C_k = 0$ for $k >= 0$. Using the fact that $cal(E)_0 = L
 
 _(point convergence)_
 
-We claim that $norm(x_k - x_star)$ is decreasing. By interchanging the role of $x$ and $y$ and summing, from (@eq:quadraticub) we can conclude
+We claim that $norm(x_k - x_star)$ is decreasing. By interchanging the role of $x$ and $y$ in (@eq:quadraticub) and summing the resulting two equations, from  we can conclude
 
 $
-  1 / L norm(nabla f(x) - nabla f (y))^2 <= chevron.l nabla f(x) - nabla f(y), x - y chevron.r
+  1 / L norm(nabla f(x) - nabla f (y))^2 <= chevron.l nabla f(x) - nabla f(y), x - y chevron.r,
 $<eq:twice-eval-and-add>
 
 for all $x, y in RR^p$. We know $nabla f(x_star) = 0$ for any $x_star in argmin(f)$, hence
@@ -365,33 +365,35 @@ By the continuity of $f$, we have $f(x_phi(k)) arrow.r f(x_infinity)$. But $seqf
 
 == The method
 
-In #cite(<nesterov83>, form: "year"), Nesterov introduced a new method for solving problems of class $scr(P)$ with a convergence in value guarantee of $cal(O)(1\/k^2)$. The following algorithm is the method in its original form from @nesterov83.
+In #cite(<nesterov83>, form: "year"), Nesterov introduced a new method for solving problems of class $scr(P)$ with a convergence in value guarantee of $cal(O)(1\/k^2)$. The following algorithm is the method in its original form.
 
-#definition([Nesterov's Method - Original])[
-  Consider a problem of class $scr(P)$. Nesterov's original method is the iterative procedure:
+#definition([Nesterov's Method - Original @nesterov83])[
+  Let $f: RR^p arrow.r RR$ be convex and #Lsmooth for unknown coefficient $L > 0$$$. Nesterov's original method is the iterative procedure:
 
-  _Initilisation:_
-  
-  Set $k = 0$, $t_0 = 1$, $alpha_0 = norm(x_0 - z) \/ norm(nabla f(y_0) - nabla f(z))$, and $x_0 = y_0 in RR^p$.
+  _Initialisation:_
 
-  _Iteration step:_
-  $
-    n_k = 
-  $
-  $
-    x_(k+1) &= y_k - alpha_k nabla f(y_k)\
-    y_(k+1) &= x_k + (t_k - 1)/t_k (x_(k+1) - x_k)
-  $
+Set $k = 0$, $t_0 = 1$, $alpha_0 = norm(y_0 - z) \/ norm(nabla f(y_0) - nabla f(z))$
+for some $z != y_0$ with $nabla f(z) != nabla f(y_0)$, and $x_0 = y_0 in RR^p$.
+
+_Iteration step:_
+$
+  n_(k+1) &= min {n in NN : f(y_k) - f(y_k - 2^(-n) alpha_k nabla f(y_k)) >= 2^(-n-1) alpha_k norm(nabla f(y_k))^2} \
+  alpha_(k+1) &= 2^(-n_(k+1)) alpha_k \
+  t_(k+1) &= 1/2 (1 + sqrt(1 + 4 t_k^2)) \
+  x_(k+1) &= y_k - alpha_(k+1) nabla f(y_k) \
+  y_(k+1) &= x_(k+1) + (t_k - 1)/t_(k+1) (x_(k+1) - x_k)
+$<eq:nesterovmethodoriginal>
 ]<def:nesterovmethodoriginal>
 
-- we can see that nesterov now uses two sequences
-- Note that nesterov used backtracking line search in the first iteration step.
+Compared with @def:gd, (@eq:nesterovmethodoriginal) method introduces several new calculations into the iteration step, though it remains a first-order algorithm, since it uses only gradient information. The first thing to note is that there are now two sequences: $seqfull({x_k}, k >= 0)$, obtained from a gradient step with a backtracking rule for the step size, and $seqfull({y_k}, k >= 0)$, which perturbs the search point according to a further sequence $seqfull({t_k}, k >= 0)$. Both will be shown to approach $x_star in arg min f$. The step-size sequence $seqfull({alpha_k}, k >= 0)$ is initialised at $norm(y_0 - z) \/ norm(nabla f(y_0) - nabla f(z))$, which by the #Lsmoothness of $f$ is guaranteed to be at least $1 \/ L$. This step is here to ensure that the step sizes satisfy @cor:convexLsmooth when the function $f$ is #Lsmooth but the smoothness coefficient itself $L$ is not known. The procedure therefore begins with a step that is plausibly too large and relies on halving by a power of $n_k$ to shrink it to the largest admissible value, rather than starting small and never attempting aggressive steps.
 
-Given @cor:convexLsmooth, the backtracking is typically avoided for simplicity and instead we just take the fixed step size $1\/L$. With this simplification, the method is typically written in the equivalent form
+For problems in $scr(P)$, we assume that the smoothness coefficient $L$ is known. Hence, given @cor:convexLsmooth the backtracking step in (@eq:nesterovmethodoriginal) can be avoided, substituting instead the largest admissable step size $1\/L$. With this simplification, the method is typically written in the equivalent form below.
 
-#definition([Nesterov's Method - Modern])[
-  Consider a problem of class $scr(P)$. Nesterov's accelerated method with a fixed step size in the main se
+#definition([Nesterov's Method])[
+  Consider a problem of class $scr(P)$. Nesterov's accelerated method is equivalent to
 ]<def:nesterovmodern>
+
+As of yet the sequence $seqfull({t_k}, k>=0)$ is completely mysterious. Indeed, Nesterov's original paper is well-known for its algebraic elegance but it did not provide any motivation for the motivation of $seqfull({t_k}, k>=0)$. In the decades since a literature
 
 #lemma([#cite(<nesterov2005smooth>, supplement: "Lemma 1")#cite(<ryu2026>, supplement: "Lemma 3.1")])[
   Consider a problem of class $scr(P)$. The following method produces the same sequences $seqfull({x_k}, k>=0), seqfull({y_k}, k>=0)$ as the iterative procedure defined in @def:nesterovmodern.
@@ -399,19 +401,35 @@ Given @cor:convexLsmooth, the backtracking is typically avoided for simplicity a
   _Initilisation:_
 ]
 
+This lemma provides some intuition for how NAG works. Due to the factor of $t_k$, at each iteration $z_k$ steps farther than a normal gradient step, accelerating the early progress but potentially overshooting. At the same time, the 'normal' iteration $y_k$ is a weighted average of $x_k$ and $z_k$ that places an increasing weight on $x_k$ with each iteration, and all the weight in the limit. Somehow it turns out that these two processes---${z_k}$ taking larger and larger steps but having less and less influence on ${y_k}$---balance each other perfectly to accelerate the convergence to $O(1\/k^2)$.
+
 == Complexity
 
-- niemirovskii theorem about a lower bound
+- what do we mean by complexity?
+- this was a new idea - thinking of classifying algorithms by their worst-case performance
+
+I state the complexity theorem of #cite(<nemirovsky1983>, form: "author") in the modern form given in @bubeck2015.
+
+#theorem([#cite(<nemirovsky1983>)])[
+
+]
 
 == The new result
 
+#theorem(cite(<ryu2026>, supplement: "Theorem 3.5"))[
+
+]
+
 - theorem of ryu 2026
 
-- present the proof in summarised form
+- present the proof in summarised form, as in the notes
 
 == The optimal gradient method
 
-- PEP
+[short section]
+
+- Explain the idea of PEP
+- State that there is the same result of point convergence for the optimal gradient method.
 
 = A non-smooth generalisation
 
@@ -420,6 +438,17 @@ Given @cor:convexLsmooth, the backtracking is typically avoided for simplicity a
 - FISTA problem
 
 - Definition of FISTA method and note the convergence of FISTA from Beck and Teboulle
+
+#definition([ISTA])[
+  @bubeck2015
+]
+
+#definition([FISTA, #cite(<beckteboulle2009>)])[
+]
+
+#theorem([Point convergence of FISTA, #cite(<chambolledossal2025>)])[
+
+]
 
 - However, in 2015 we already had a theorem - point convergence of a slightly modified version of FISTA, but not the original FISTA itself (for otherwise there would be no need of ryu's paper since a proof of point convergence for FISTA is a proof of nesterov for convex, smooth functions).
 
