@@ -77,13 +77,11 @@ suffix: [#h(1fr) $qed$],
 */
 #let theorem = thmbox("theorem", "Theorem")
 #let lemma = thmbox("theorem", "Lemma", inset: (x: 1em, top: 0em))
-#let corollary = thmplain(
-  "corollary",
+#let corollary = thmbox(
+  "theorem",
   "Corollary",
-  base: "theorem",
-  titlefmt: strong
 )
-#let definition = thmbox("definition", "Definition", inset: (x: 1em, top: 0em))
+#let definition = thmbox("theorem", "Definition", inset: (x: 1em, top: 0em))
 
 #let example = thmplain("example", "Example").with(numbering: none)
 #let proof = thmproof("proof", "Proof", inset: (x: 1em, top: 0em))
