@@ -69,18 +69,6 @@ The answer eventually came in the affirmative from #cite(<nesterov83>, form: "au
 
 The rest of this work traces a narrow path through the literature, with the goal of providing a tightly-focused context for recent proof (Theorem 3.5 in @ryu2026) in terms of the preceeding literature. The material starts simple, assuming a familiarity with typical analysis material but not necessary iterative schemes for optimisation. I build up to the main result slowly, including providing a short introduction to optimisation algorithms in terms that concern the work of this thesis.
 
-== Literature selection
-
-The literature on optimisation, even for the subset of problems considered in this thesis, is extremely large.
-
-- begins with linear programming in WWII
-- different periods over the 20th century
-- today there are two main branches: optimisation and netural networks (?)
-- There is a wide range of potentially relelvant literature to the question studied in this thesis. I have been deliberately conservative in the topic choice, partly due to time constraints, but also for the clarity of exposition.
-  - Mention some papers quickly in passing on topics that could have been relevant, and do it in section order
-    - optimisation: could have discussed interior-point method contributions by Niemirovski and Nesterov, whose work features
-    - algorithms: 
-
 == Notation and conventions
 
 - $p in NN$ and functions are written following @boyd2004 in the sense that we have $f : RR^p arrow.r RR$ and $dom(f)$ is the domain of the function $f$, and $dom(f) subset.eq RR^p$ with strict inclusion possible. However, in this thesis functions will typically be unrestricted in their domain.
@@ -278,7 +266,7 @@ That is, for problems in $scr(P)$ a 'gradient step' of size at most $1\/L$ _guar
   $<eq:conv-in-interates>
 ]<thm:gd>
 
-I reproduce a short proof that explicitly shows the use of a _potential function_ based on a recent effort to collect a unified approach to proofs of gradient methods #cite(<gupta2019>). The potential function perspective is useful for my purposes because the same device turns out to be critical for the main result of #cite(<ryu2026>, form: "author"). See @nesterov2018lectures@bubeck2015 for more classical expositions, upon which I also draw for the proof of point convergence.
+I reproduce a short proof that explicitly shows the use of a _potential function_ based on a recent effort to collect a unified approach to proofs of gradient methods (#cite(<gupta2019>)#cite(<dAspremont2021>)). The potential function perspective is useful for my purposes because the same device turns out to be critical for the main result of #cite(<ryu2026>, form: "author"). See @nesterov2018lectures@bubeck2015 for more classical expositions, upon which I also draw for the proof of point convergence.
 
 The main idea in @gupta2019 is to define a _potential_ function of the form
 
@@ -403,9 +391,12 @@ For problems in $scr(P)$, we assume that the smoothness coefficient $L$ is known
   $x_0 = y_0 in RR^p$ and $seqfull({t_k}, k>=0)$ satisfying $t_0 = 1$ and $t_(k+1)^2 - t_(k+1) <= t_k^2$.
 
   _Iteration step:_
+
+  For $k = 0, 1, ...$,
+
   $
-    x_(k+1) &= y_k - 1/L nabla f(x_k) \
-    y_(k+1) &= x_(k+1) + (t_k - 1)/t_(k+1) (x_(k+1) - x_k)
+    x_(k+1) &= y_k - 1/L nabla f(x_k), \
+    y_(k+1) &= x_(k+1) + (t_k - 1)/t_(k+1) (x_(k+1) - x_k).
   $
 ]<def:nesterovmodern>
 
@@ -414,7 +405,18 @@ For problems in $scr(P)$, we assume that the smoothness coefficient $L$ is known
 
   _Initilisation:_
 
+  $x_0 = y_0 = z_0 in RR^p$ and $seqfull({t_k}, k>=0)$ satisfying $t_0 = 1$ and $t_(k+1)^2 - t_(k+1) <= t_k^2$.
+
   _Iteration step:_
+  For $k = 0, 1, ...$,
+
+  $
+    x_(k+1) &= y_k - 1/L nabla f(y_k), \
+    z_(k+1) &= z_k - t_k / L nabla f(y_k), \
+    y_(k+1) &= (1 - 1 / t_(k+1)) x_(k+1) + 1 / t_(k+1) z_(k+1).
+  $
+
+
 ]<lem:reformulation>
 
 This lemma provides some intuition for how NAG works. Due to the factor of $t_k$, at each iteration $z_k$ steps farther than a normal gradient step, accelerating the early progress but potentially overshooting. At the same time, the 'normal' iteration $y_k$ is a weighted average of $x_k$ and $z_k$ that places an increasing weight on $x_k$ with each iteration, and all the weight in the limit. Somehow it turns out that these two processes---${z_k}$ taking larger and larger steps but having less and less influence on ${y_k}$---balance each other perfectly to accelerate the convergence to $O(1\/k^2)$.
@@ -486,30 +488,34 @@ Although #cite(<nesterov83>, form: "author")'s method was the first to close the
 Depsite all the progress on understanding the behaviour of the quantity $f(x_k) - f_star$ seen in the previous sections, the question of point convergence was only settled in early #cite(<ryu2026>, form: "year"). #cite(<ryu2026>, form: "author")'s new result confirming the point convergence of #cite(<nesterov83>)'s method
 
 #theorem(cite(<ryu2026>, supplement: "Theorem 3.5"))[
-  Consider an optimisation problem of class $scr(P)$ and consider the iterative procedure defined by @def:nesterovmodern. The sequences $seqfull({x_k}, k>=0)$ and $seqfull({y_k}, k>=0)$ converge to the same minimiser $x_infinity in argmin(f)$:
+  Consider an optimisation problem of class $scr(P)$ and consider the iterative procedure defined by @def:nesterovmodern where $t_(k+1)^2 - t_(k+1) = t_k^2$. The sequences $seqfull({x_k}, k>=0)$ and $seqfull({y_k}, k>=0)$ converge to the same minimiser $x_infinity in argmin(f)$:
   $
     x_k arrow.r x_infinity, y_k arrow.r x_infinity, x_infinity in argmin(f)
   $
 ]
 
 #proof[
-We refer to @ryu2026 for the full proof and sketch only its structure here.
+I refer to @ryu2026 for the full proof and sketch only its structure here, noting the key innovation.
 
-The high-level strategy of the proof is as follows.
++ Rewrite @def:nesterovmodern in the equivalent form of @lem:reformulation, which introduces the auxiliary sequence $seqfull({z_k}, k>=0)$. A simple analysis shows that the sequences $seqfull({x_k}, k>=0)$, $seqfull({y_k}, k>= 0)$, and $seqfull({z_k}, k>=0)$ are all bounded.
 
-+ Rewrite NAG in the equivalent form of @lem:reformulation, which introduces the auxiliary sequence ${z_k}$.
-
-+ Since ${x_k}$ is bounded and $f(x_k) -> f^star$ (both following from the bounded potential of @lem:nesterovpotential), Bolzano--Weierstrass yields at least one accumulation point, and continuity of $f$ places every accumulation point in $arg min f$. If there is exactly one accumulation point, the bounded sequence converges to it and we are done.
++ Since $seqfull({x_k}, k>=0)$ is bounded and $f(x_k) -> f^star$ (both following from the bounded potential of @lem:nesterovpotential), the Bolzano--Weierstrass Theorem yields at least one accumulation point, and continuity of $f$ means every accumulation point is in $arg min f$. Hence the proof is complete if there is exactly one accumulation point.
 
 + Otherwise, suppose ${x_k}$ has two distinct accumulation points $z_1, z_2 in arg min f$; the rest of the proof shows that they must coincide.
 
-+ Apply @lem:nesterovpotential. The potential $cal(E)_k (z)$ depends on the minimiser $z$ only through the term $L/2 norm(z_k - z)^2$, so the difference $cal(E)_k (z_1) - cal(E)_k (z_2)$ cancels the objective-gap term $t_(k-1)^2 (f(x_k) - f^star)$ outright -- it carries no dependence on the minimiser -- and, once the remaining squared distances are expanded, the quadratic $L/2 norm(z_k)^2$ as well:
-  $ norm(z_k - z_1)^2 - norm(z_k - z_2)^2 = -2 chevron.l z_k, z_1 - z_2 chevron.r + norm(z_1)^2 - norm(z_2)^2. $
++ Here is the key innovation. Apply @lem:nesterovpotential to the two distinct accumulation points $z_1, z_2$. The potential $cal(E)_k (z)$ depends on the minimiser $z$ only through the term $L/2 norm(z_k - z)^2$, so the difference $cal(E)_k (z_1) - cal(E)_k (z_2)$ cancels the objective-gap term $t_(k-1)^2 (f(x_k) - f^star)$ and, once the remaining squared distances are expanded, the quadratic $L/2 norm(z_k)^2$ is cancelled as well:
+  $
+  norm(z_k - z_1)^2 - norm(z_k - z_2)^2 = -2 chevron.l z_k, z_1 - z_2 chevron.r + norm(z_1)^2 - norm(z_2)^2.
+  $
+
   What survives is affine in $z_k$. Writing $h_k := norm(x_k - z_1)^2 - norm(x_k - z_2)^2$ for the same affine functional evaluated at $x_k$, and using the affine combination $z_(k+1) = t_k x_(k+1) - (t_k - 1) x_k$ supplied by @lem:reformulation, the three quantities collapse, with $H_k := cal(E)_k (z_1) - cal(E)_k (z_2)$, into the linear recursion
-  $ h_(k+1) + (t_k - 1)(h_(k+1) - h_k) = 2/L H_(k+1). $
 
-+ Because $t_k <= k + 1$, the series $sum_k 1\/(t_k - 1)$ diverges, and the right-hand side of the recursion converges (each potential does), so the summation lemma forces $h_k$ to a finite limit. Evaluating that limit along subsequences converging to $z_1$ and to $z_2$ gives $-norm(z_1 - z_2)^2$ and $norm(z_1 - z_2)^2$; as the limit is unique, $z_1 = z_2$. Hence ${x_k}$ converges, and ${y_k}$ converges to the same minimiser.
+  $
+  h_(k+1) + (t_k - 1)(h_(k+1) - h_k) = 2/L H_(k+1).
+  $
+  This step is critical and avoids the roadblock that other proofs have relied on in needing to control the behaviour of a term of the form $norm(x_(k+1) - x_(k))^2$ under @def:nesterovmodern @ryu2026 @chambolledossal2025.
 
++ Because $t_k <= k + 1$, the series $sum_k 1\/(t_k - 1)$ diverges, and the right-hand side of the recursion converges. This forces $h_k$ to converge to a finite limit. Evaluating that limit along subsequences converging to $z_1$ and to $z_2$ gives $-norm(z_1 - z_2)^2$ and $norm(z_1 - z_2)^2$; as the limit is unique, $z_1 = z_2$. Hence ${x_k}$ converges, and ${y_k}$ converges to the same minimiser.
 ]
 
 In the past decade before this new proof some progress on adjacent questions was made. The setting considered by FISTA---Fast iterative shirnkage-thresholding Algorithm---builds on the ideas of Nesterov and generalises the method to a non-smooth setting.
@@ -524,7 +530,7 @@ where $f$ is convex and #Lsmooth as usual but $g$ is non-smooth. The condition o
 
 $
   x in RR^p, space argmin_(y in RR^P) g(y) + norm(x - y)^2/2,
-$
+$<eq:proximalmap>
 
 can be easily solved. For example, the motivating example in the literature is the $ell_1$--regularisationed linear regression setting, where we solve
 
@@ -535,18 +541,40 @@ $
 for $A in RR^(n times p), lambda > 0$. The FISTA algorithm essential does Nesterov's accelerated method but add a proximal operator as a first step to handle $g$, as seen in the following definition.
 
 #definition([FISTA, #cite(<beckteboulle2009>)])[
-  Consider a problem of the form @eq:FISTAproblem
+  Consider a problem of the form (@eq:FISTAproblem). The FISTA algorithm is the iterative procedure defined as follows:
+  
+  _Initialisation:_
+
+  $y_1 = x_0 in RR^p$, $t_1 = 1$.
+
+  _Iterative step:_
+  For $k = 1, 2, ...$,
+
+  $
+    x_k &= argmin_(x in RR^p) {g(x) + L / 2 norm(x - (y_k - 1 / L nabla f(y_k)))^2} \
+    t_(k+1) &= 1/2 (1 + sqrt(1 + 4 t_k^2)) \
+    y_(k+1) &= x_k + (t_k - 1/t_(k+1)) (x_k - x_(k-1))
+
+  $
+]<def:FISTA>
+
+The original FISTA paper was able to prove a $cal(O)(1\/k^2)$ guarantee of FISTA's performance that even exactly matches the constant of #cite(<nesterov83>). This demonstrates that acceleration _could_ be achieved even with a non-smooth component that was sufficiently well-beheaved. Furtermore, already in #cite(<chambolledossal2025>, form: "year") it was proven that FISTA exhibited point convergence when of a slightly modified version of FISTA, but not the original FISTA itself (for otherwise there would be no need of ryu's paper since a proof of point convergence for FISTA is a proof of nesterov for convex, smooth functions).
+
+#theorem([Point convergence of modified FISTA, #cite(<chambolledossal2025>, supplement: "Theorem 3")])[
+  Let $a>2$ and consider the FISTA procedure in @def:FISTA with the modification
+  $
+    t_k = (k + (a - 1)) / a.
+  $<eq:newt>
+  Then the sequence $seqfull({x_k}, k>=0)$ converges to some $x_star in argmin(f + g)$.
 ]
 
-- However, in 2015 we already had a theorem - point convergence of a slightly modified version of FISTA, but not the original FISTA itself (for otherwise there would be no need of ryu's paper since a proof of point convergence for FISTA is a proof of nesterov for convex, smooth functions).
+As #cite(<nesterov83>, form: "author")'s original method is just a special case of @eq:FISTAproblem with $g = 0$ such that the first update in the iterative step of @def:FISTA collapses to the identity function, this is a close partial result because (@eq:newt) does satisfy the inequality $t_(k+1)^2 - t_(k+1) <= t_k^2$ strictly. However, through their new approach #cite(<ryu2026>, form: "author") were able to cover the the case where this condition holds with equality. Very quickly following #cite(<ryu2026>), @bot2025 was able to prove with the same technique that this result does indeed extent to the FISTA case.
 
-#theorem([Point convergence of FISTA, #cite(<chambolledossal2025>, supplement: "Theorem 3")])[
+= Conclusion and perspectives
 
-]
+We have seen how 
 
 
-
-= Conclusions and perspectives
 
 - Mention the continuous time perspective
 
@@ -556,6 +584,8 @@ appears even in the classic work of Nemirovski and Yudin [18], and has been wide
 e. g., [24, 29, 17, 30]).
 
 - Mention implicit bias in machine learning
+
+- Use of LLMs in mathematics @knuth2026cycles
 
 /* document bibliograph */
 #bibliography("thesis.bib")
