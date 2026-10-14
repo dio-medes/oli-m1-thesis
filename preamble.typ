@@ -26,6 +26,7 @@
 #let argmin = math.op("argmin", limits: true)
 #let minimise = math.op("minimise", limits: true)
 #let span = math.op("Span")
+$tilde(a) = accent(a, \u{0303})$
 // text shortcuts
 #let Lsmooth = box([$L$--smooth])
 #let Lsmoothness = box([$L$--smoothness])
