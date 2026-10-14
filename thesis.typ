@@ -472,7 +472,7 @@ $
 
 == The new result of #cite(<ryu2026>, form: "author")
 
-Despite all the progress on understanding the behaviour of the quantity $f(x_k) - f_star$ seen in the previous sections, the question of point convergence was only settled in early #cite(<ryu2026>, form: "year"). #cite(<ryu2026>, form: "author")'s new result confirming the point convergence of #cite(<nesterov83>)'s method
+Despite all the progress on understanding the behaviour of the quantity $f(x_k) - f_star$ seen in the previous sections, the question of point convergence was only settled very recently, in early #cite(<ryu2026>, form: "year"). It is an early example of a proof in advanced mathematics that was constructed by a large language model.
 
 #theorem(cite(<ryu2026>, supplement: "Theorem 3.5"))[
   Consider an optimisation problem of class $scr(P)$ and consider the iterative procedure defined by @def:nesterovmodern where $t_(k+1)^2 - t_(k+1) = t_k^2$. The sequences $seqfull({x_k}, k>=0)$ and $seqfull({y_k}, k>=0)$ converge to the same minimiser $x_infinity in argmin(f)$:
